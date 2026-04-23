@@ -76,17 +76,20 @@ async function createTodo(event) {
 //attach createTodo() to the submit event of the form
 document.forms['addForm'].addEventListener('submit', createTodo);
 
-async function toggleDone(event) {
+async function toggleDone(event){
   let checkbox = event.target;
+
   let id = checkbox.dataset['id'];//get id from data attribute
 
-  let result = await sendRequest(`${server}/todos/${id}/done`, 'PUT');
+  let done = checkbox.checked;//returns true if the checkbox is checked
+  let result = await sendRequest(`${server}/todo/${id}`, 'PUT', {done: done});
 
-  toast(result.message);
+  let message = done ? 'Done!' : 'Not Done!';
+  toast(message);
 }
 
-async function deleteTodo(id) {
-  let result = await sendRequest(`${server}/todos/${id}`, 'DELETE');
+async function deleteTodo(id){
+  let result = await sendRequest(`${server}/todo/${id}`, 'DELETE');
 
   toast('Deleted!');
 
